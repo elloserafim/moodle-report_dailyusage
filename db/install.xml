@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="report/daily/db" VERSION="20130624" COMMENT="XMLDB file for Moodle report/daily"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="report_daily" COMMENT="report_daily table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="9" NOTNULL="true" SEQUENCE="true" NEXT="courseid"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="9" NOTNULL="false" DEFAULT="0" SEQUENCE="false" PREVIOUS="id" NEXT="categoryid"/>
+        <FIELD NAME="categoryid" TYPE="int" LENGTH="9" NOTNULL="false" DEFAULT="0" SEQUENCE="false" PREVIOUS="courseid" NEXT="time_start"/>
+        <FIELD NAME="time_start" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="false" PREVIOUS="categoryid" NEXT="time_end"/>
+        <FIELD NAME="time_end" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="false" PREVIOUS="time_start" NEXT="role_id"/>
+        <FIELD NAME="role_id" TYPE="int" LENGTH="9" NOTNULL="false" SEQUENCE="false" PREVIOUS="time_end" NEXT="stat_type"/>
+        <FIELD NAME="stat_type" TYPE="char" LENGTH="15" NOTNULL="true" DEFAULT="all" SEQUENCE="false" PREVIOUS="role_id" NEXT="activity"/>
+        <FIELD NAME="activity" TYPE="int" LENGTH="9" NOTNULL="true" SEQUENCE="false" PREVIOUS="stat_type" NEXT="locked"/>
+        <FIELD NAME="locked" TYPE="int" LENGTH="2" NOTNULL="false" DEFAULT="0" SEQUENCE="false" PREVIOUS="activity"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>      
+      <INDEXES>
+        <INDEX NAME="cat_idx" UNIQUE="false" FIELDS="categoryid" NEXT="course_idx"/>
+        <INDEX NAME="course_idx" UNIQUE="false" FIELDS="courseid" PREVIOUS="cat_idx"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>
