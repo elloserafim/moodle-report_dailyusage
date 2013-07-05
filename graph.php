@@ -1,4 +1,4 @@
-<?php  //$Id: graph.php,v 1.11.2.4 2008/11/30 12:05:04 skodak Exp $
+<?php
 
     require_once('../../config.php');
     require_once($CFG->dirroot.'/lib/statslib_new.php');
@@ -28,15 +28,6 @@
     require_login($course);
     $context = get_context_instance(CONTEXT_COURSE, $course->id);
 
-	/*
-    if (!$course->showreports or $USER->id != $userid) {
-        require_capability('coursereport/stats:view', $context);
-    }
-	*/
-	
-    //->what does this do????  it triggers an error stats_check_uptodate($course->id);  
-    // exit;  -> to debug the previous line
-
     //$param = stats_get_parameters($time,$stat_type,$course->id,$mode);
     $param = stats_get_parameters($time, $stat_type, $course->id,$mode);
 
@@ -44,24 +35,11 @@
         $param->table = 'user_'.$param->table;
     }
 
-
-
-    /*
-    $sql = 'SELECT '.((empty($param->fieldscomplete)) ? 'id,roleid,timeend,' : '').$param->fields
-    .' FROM '.$CFG->prefix.'stats_'.$param->table.' WHERE '
-    .(($course->id == SITEID) ? '' : ' courseid = '.$course->id.' AND ')
-     .((!empty($userid)) ? ' userid = '.$userid.' AND ' : '')
-     .((!empty($roleid)) ? ' roleid = '.$roleid.' AND ' : '')
-     . ((!empty($param->stattype)) ? ' stattype = \''.$param->stattype.'\' AND ' : '')
-     .' timeend >= '.$param->timeafter
-    .' '.$param->extras
-    .' ORDER BY timeend DESC';
-     */
     $sql = 'SELECT id, role_id, time_end, activity as line1 FROM '.$CFG->prefix.'report_daily WHERE '
      .((!empty($roleid)) ? ' role_id = '.$roleid.' AND ' : '') . ((!empty($param->stattype)) ? ' stat_type = \''.$param->stattype.'\' AND ' : '')
      .' time_end >= '.$param->timeafter;
 
-	// nkowald - 2010-10-20 - Updated the graph query because it NEEDS to query where courseid = 0 and categoryid = 0 if none set, otherwise gets wrong data.
+	// Updated the graph query because it NEEDS to query where courseid = 0 and categoryid = 0 if none set, otherwise gets wrong data.
     // check for course and category ids
 	if ($filter_course != 0) {
 		$sql .= " AND courseid = ".$filter_course;
@@ -149,7 +127,7 @@
         }
 
         $roleid = 0;
-        krsort($roles); // the same sorting as in table bellow graph
+        krsort($roles); // the same sorting as in table below graph
 
         $colors = array('green', 'blue', 'red', 'purple', 'yellow', 'olive', 'navy', 'maroon', 'gray', 'ltred', 'ltltred', 'ltgreen', 'ltltgreen', 'orange', 'ltorange', 'ltltorange', 'lime', 'ltblue', 'ltltblue', 'fuchsia', 'aqua', 'grayF0', 'grayEE', 'grayDD', 'grayCC', 'gray33', 'gray66', 'gray99');
         $colorindex = 0;

@@ -38,15 +38,6 @@ $title_num_labels="No: Labels";
 $title_res_minus_labels="Resources - Labels";
 
 ?>
-    
-<style type="text/css">
-<!--
-.style1 {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-}
--->
-</style>
 
 <center>
 
@@ -58,10 +49,6 @@ $title_res_minus_labels="Resources - Labels";
 
 	<?php
     
-    //print_spacer(6,1);   
-    //$OUTPUT->spacer();
-    
-    //if (!$courses = get_records("course","visible", "1","timemodified DESC", "id,fullname,shortname,startdate,timemodified,password,modinfo")) {
     if (!$courses = $DB->get_records("course",array("visible" => "1"),"timemodified DESC")) {
         error("geen courses!");
     }

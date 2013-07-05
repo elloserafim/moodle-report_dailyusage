@@ -201,6 +201,5 @@ div.line {
     </table>
 </div>
 <?php
-    //print_footer();
 	echo $OUTPUT->footer();
 ?>
