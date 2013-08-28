@@ -16,11 +16,11 @@ require_capability('report/loglive:view', $context);
 
 $title = "Last Updated Courses";
 
-$url = new moodle_url('/report/daily/reports.php');
+$url = new moodle_url('/report/dailyusage/reports.php');
 
 $PAGE->set_url($url);
 $PAGE->set_title($title);
-$PAGE->navbar->add('Daily', new moodle_url('index.php'));
+$PAGE->navbar->add('Daily usage', new moodle_url('index.php'));
 $PAGE->navbar->add($title, new moodle_url('index.php'));
 
 echo $OUTPUT->header();

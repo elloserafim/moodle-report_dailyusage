@@ -1,3 +1,3 @@
 <?php
 
-$string['pluginname'] = 'Daily';
+$string['pluginname'] = 'Daily usage';

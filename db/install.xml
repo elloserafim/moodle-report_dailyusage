@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="report/daily/db" VERSION="20130624" COMMENT="XMLDB file for Moodle report/daily"
+<XMLDB PATH="report/dailyusage/db" VERSION="20130624" COMMENT="XMLDB file for Moodle report/dailyusage"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-    <TABLE NAME="report_daily" COMMENT="report_daily table retrofitted from MySQL">
+    <TABLE NAME="report_dailyusage" COMMENT="report_dailyusage table retrofitted from MySQL">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="9" NOTNULL="true" SEQUENCE="true" NEXT="courseid"/>
         <FIELD NAME="courseid" TYPE="int" LENGTH="9" NOTNULL="false" DEFAULT="0" SEQUENCE="false" PREVIOUS="id" NEXT="categoryid"/>

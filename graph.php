@@ -35,7 +35,7 @@
         $param->table = 'user_'.$param->table;
     }
 
-    $sql = 'SELECT id, role_id, time_end, activity as line1 FROM '.$CFG->prefix.'report_daily WHERE '
+    $sql = 'SELECT id, role_id, time_end, activity as line1 FROM '.$CFG->prefix.'report_dailyusage WHERE '
      .((!empty($roleid)) ? ' role_id = '.$roleid.' AND ' : '') . ((!empty($param->stattype)) ? ' stat_type = \''.$param->stattype.'\' AND ' : '')
      .' time_end >= '.$param->timeafter;
 

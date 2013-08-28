@@ -42,7 +42,7 @@
 
 			global $DB;
 						           
-            $query = "SELECT * FROM mdl_daily LIMIT 1";
+            $query = "SELECT * FROM ".$this->prefix."dailyusage LIMIT 1";
 		
             
             if (!$table_exists = $DB->execute($query)) {
@@ -51,7 +51,7 @@
                 echo "Moodle stats table doesn't exist, creating it now...<br />";
 
                 
-                $query = "CREATE TABLE ".$this->prefix."report_daily (
+                $query = "CREATE TABLE ".$this->prefix."report_dailyusage (
                     id INT(10) unsigned NOT NULL AUTO_INCREMENT,
                     courseid INT(10) unsigned DEFAULT 0,
                     categoryid INT(10) unsigned DEFAULT 0,
@@ -69,7 +69,7 @@
                 }
 
                 
-                $stats = "INSERT INTO ".$this->prefix."report_daily (id, courseid, categoryid, time_start, time_end, role_id, stat_type, activity, locked) 
+                $stats = "INSERT INTO ".$this->prefix."report_dailyusage (id, courseid, categoryid, time_start, time_end, role_id, stat_type, activity, locked) 
                     VALUES (113,0,0,1235865600,1238540399,2,'all',246,1),(112,0,0,1235865600,1238540399,3,'all',7812,1),(111,0,0,1235865600,1238540399,5,'all',30852,1),(110,0,0,1233446400,1235865599,1,'all',2715,1),(109,0,0,1233446400,1235865599,2,'all',690,1),(108,0,0,1233446400,1235865599,3,'all',7682,1),(107,0,0,1233446400,1235865599,5,'all',33380,1),(106,0,0,1230768000,1233446399,1,'all',3326,1),(105,0,0,1230768000,1233446399,2,'all',665,1),(104,0,0,1230768000,1233446399,3,'all',5929,1),(103,0,0,1230768000,1233446399,5,'all',30406,1),(102,0,0,1228089600,1230767999,1,'all',8635,1),(101,0,0,1228089600,1230767999,2,'all',453,1),(100,0,0,1228089600,1230767999,3,'all',8216,1),(99,0,0,1228089600,1230767999,5,'all',39576,1),(98,0,0,1225497600,1228089599,1,'all',5977,1),(97,0,0,1225497600,1228089599,2,'all',5032,1),(96,0,0,1225497600,1228089599,3,'all',11193,1),(95,0,0,1225497600,1228089599,5,'all',27435,1),(94,0,0,1222815600,1225497599,1,'all',279,1),(93,0,0,1222815600,1225497599,2,'all',948,1),(92,0,0,1222815600,1225497599,3,'all',648,1),(91,0,0,1222815600,1225497599,5,'all',4172,1),(114,0,0,1235865600,1238540399,1,'all',4183,1),(115,0,0,1238540400,1241132399,5,'all',43938,1),(116,0,0,1238540400,1241132399,3,'all',7309,1),(117,0,0,1238540400,1241132399,2,'all',314,1),(118,0,0,1238540400,1241132399,1,'all',3210,1),(119,0,0,1241132400,1243810799,5,'all',28070,1),(120,0,0,1241132400,1243810799,3,'all',4992,1),(121,0,0,1241132400,1243810799,2,'all',77,1),(122,0,0,1241132400,1243810799,1,'all',8032,1),(123,0,0,1243810800,1246402799,5,'all',42501,1),(124,0,0,1243810800,1246402799,3,'all',6951,1),(125,0,0,1243810800,1246402799,2,'all',2183,1),(126,0,0,1243810800,1246402799,1,'all',1958,1),(127,0,0,1246402800,1249081199,5,'all',88835,1),(128,0,0,1246402800,1249081199,3,'all',10242,1),(129,0,0,1246402800,1249081199,2,'all',5554,1),(130,0,0,1246402800,1249081199,1,'all',4570,1),(145,0,0,1249081200,1251759599,3,'all',5111,1),(144,0,0,1249081200,1251759599,2,'all',3898,1),(143,0,0,1249081200,1251759599,1,'all',1485,1),(151,0,0,1249081200,1251759599,5,'all',17075,1)";
 
                 if (!$result = execute_sql($stats, false)) {
@@ -90,7 +90,7 @@
 			
 			global $DB;
 			          
-            $query = "SELECT r.id, s.activity, s.locked FROM ".$this->prefix."report_daily s 
+            $query = "SELECT r.id, s.activity, s.locked FROM ".$this->prefix."report_dailyusage s 
                 JOIN ".$this->prefix."role r ON s.role_id = r.id 
                 WHERE s.time_start = ".$start_date." AND s.time_end = ".$end_date." 
                     AND s.stat_type = '$stat_type'";
@@ -275,7 +275,7 @@
                             $stat_data->locked      = $this->lockOrNot($start_date);
 
 						
-                            $query = "SELECT id FROM ".$this->prefix."report_daily WHERE time_start = $start_date AND time_end = $end_date AND role_id = $key AND stat_type = '$stat_type'";
+                            $query = "SELECT id FROM ".$this->prefix."report_dailyusage WHERE time_start = $start_date AND time_end = $end_date AND role_id = $key AND stat_type = '$stat_type'";
                             if ($filter_course != 0) {
                                 $query .= " AND courseid = $filter_course";
                             } else if ($filter_category != 0) {
@@ -292,12 +292,12 @@
                                     $row_id = $result->id;
                                 }
                                 $stat_data->id = $row_id;
-                                if (!$DB->update_record('report_daily', $stat_data)) {
+                                if (!$DB->update_record('report_dailyusage', $stat_data)) {
                                     $this->errors[] = "Stat could not be updated (".date('F Y', $start_date)."), Role ID = $key";
                                 }
                             
                             } else {
-                                if (!$DB->insert_record('report_daily', $stat_data)) {
+                                if (!$DB->insert_record('report_dailyusage', $stat_data)) {
                                     $this->errors[] = "Stat could not be inserted (".date('F Y', $start_date)."), Role ID = $key";
                                 }
                             }
@@ -326,7 +326,7 @@
 			
             
             $timestamp = '';
-            $query = "SELECT time_start from ".$this->prefix."report_daily ORDER BY time_start ASC LIMIT 1";
+            $query = "SELECT time_start from ".$this->prefix."report_dailyusage ORDER BY time_start ASC LIMIT 1";
             if ($oldest_stat = $DB->get_records_sql($query)) {
                 foreach($oldest_stat as $oldest) {
                     $timestamp = $oldest->time_start;
@@ -680,7 +680,7 @@
 				try {
 					if ($logs = $DB->get_records_sql($query)) {
                     
-                    $query = "SELECT locked FROM ".$this->prefix."report_daily WHERE time_start = $start_date AND time_end = $end_date AND stat_type = '$stat_type'";
+                    $query = "SELECT locked FROM ".$this->prefix."report_dailyusage WHERE time_start = $start_date AND time_end = $end_date AND stat_type = '$stat_type'";
                     if ($filter_course != 0) {
                         $query .= " AND courseid = $filter_course LIMIT 1";
                     } else if ($filter_category != 0) {
@@ -774,7 +774,7 @@
             }
             
             
-            $query = "SELECT time_start from ".$this->prefix."report_daily ORDER BY time_start ASC LIMIT 1";
+            $query = "SELECT time_start from ".$this->prefix."report_dailyusage ORDER BY time_start ASC LIMIT 1";
             if ($oldest_log = $DB->get_records_sql($query)) {
                 foreach($oldest_log as $oldest) {
                     $timestamp = $oldest->time_start;
@@ -1115,13 +1115,13 @@
 				$ts_end = $this->generateTsFromDate(23, 59, 59, $last_month_val, $end_day, $year_val);
 				
 				
-				$query = "UPDATE mdl_daily SET locked = 1 WHERE categoryid = 0 AND courseid = 0 and time_start = '$ts_start' and time_end = '$ts_end' and locked = 0";
+				$query = "UPDATE mdl_dailyusage SET locked = 1 WHERE categoryid = 0 AND courseid = 0 and time_start = '$ts_start' and time_end = '$ts_end' and locked = 0";
 				
 				$DB->execute_sql($query);
 				
 				
 				$csv_catids = implode(',', $cat_ids);
-				$query = "UPDATE mdl_daily SET locked = 1 WHERE categoryid IN ($csv_catids) AND courseid = 0 and time_start = '$ts_start' and time_end = '$ts_end' and locked = 0";
+				$query = "UPDATE mdl_dailyusage SET locked = 1 WHERE categoryid IN ($csv_catids) AND courseid = 0 and time_start = '$ts_start' and time_end = '$ts_end' and locked = 0";
 				
 				$DB->execute_sql($query);
 				

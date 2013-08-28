@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Daily Report Plugin
+ * Daily usage plugin
  *
  * @package    report
  * @copyright  2013 onwards Szilard Szabo (http://szilard.co.uk)
@@ -26,6 +26,6 @@ defined('MOODLE_INTERNAL') || die;
 
 $plugin->version   = 2012062400; 				// The current plugin version (Date: YYYYMMDDXX)
 $plugin->requires  = 2012110900;     			// Requires this Moodle version
-$plugin->component = 'report_daily'; 			// Full name of the plugin (used for diagnostics)
+$plugin->component = 'report_dailyusage'; 		// Full name of the plugin (used for diagnostics)
 $plugin->maturity  = MATURITY_BETA; 			// Maturity of the plugin
 $plugin->release   = '0.1 (Build: 2012062400)'; 

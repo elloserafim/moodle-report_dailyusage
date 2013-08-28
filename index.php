@@ -14,12 +14,12 @@ $context = context_course::instance($course->id);
 
 require_capability('report/loglive:view', $context);
 
-$title = 'Daily';
-$url = new moodle_url('/report/daily/index.php', array('ts'=>$ts));
+$title = 'Daily usage';
+$url = new moodle_url('/report/dailyusage/index.php', array('ts'=>$ts));
 
 $PAGE->set_url($url);
 $PAGE->set_title($title);
-$PAGE->navbar->add('Daily', new moodle_url('index.php'));
+$PAGE->navbar->add('Daily usage', new moodle_url('index.php'));
 
 echo $OUTPUT->header();
 	
@@ -94,7 +94,7 @@ div.line {
             <tr>
                 <td id="left-column" summary="layout" valign="top">
                     <div id="stats_menu">
-                        <h3>Daily</h3>
+                        <h3>Daily usage</h3>
                         <ul>
 							<li><span style="color:#AAA;">Stat</span></li>
                         </ul>
@@ -132,7 +132,7 @@ div.line {
 				
 				echo '<div id="activity">';
 				
-				echo '<h1>Daily</h1>';
+				echo '<h1>Daily usage</h1>';
 				
 				// Get approx. number of students currently online
 				echo '<h4>Online Users</h4>';
@@ -154,7 +154,7 @@ div.line {
 				echo '</form></div>';
 				
 				echo '<h4>Usage that most affects performance</h4>';
-				echo '<div class="graph"><img src="'.$CFG->wwwroot.'/report/daily/activitygraph.php?ts='.$timestamp.'" alt="Graph" width="750" height="400" /></div>';
+				echo '<div class="graph"><img src="'.$CFG->wwwroot.'/report/dailyusage/activitygraph.php?ts='.$timestamp.'" alt="Graph" width="750" height="400" /></div>';
 
 				echo '<h4>User Logins</h4>';
 				$end_today = strtotime('+8 hours', $timestamp);
