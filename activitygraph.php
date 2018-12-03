@@ -13,7 +13,7 @@ $graph->parameter['legend'] = 'outside-bottom';
 // Possible values for legend: 'top-left', 'top-right', 'bottom-left', 'bottom-right', 
 //                              'outside-top', 'outside-bottom', 'outside-left', or 'outside-right'
 $graph->parameter['legend_size'] = 10;
-$graph->parameter['x_axis_angle'] = 0;
+$graph->parameter['x_axis_angle'] = 90;
 $graph->parameter['title'] = false;
 $graph->y_tick_labels = null;
 
@@ -22,30 +22,35 @@ $colorindex = 0;
 
 //$timestamp_day_end = strtotime('+8 hours', $timestamp);
 
-$graph->y_order = array('logins', 'course_views', 'quiz', 'feedback');
-$graph->y_format['logins'] = array('colour' => 'red', 'line' => 'line', 'legend' => 'User Logins');
-$graph->y_format['course_views'] = array('colour' => 'blue', 'line' => 'line', 'legend' => 'Course Activity');
-$graph->y_format['quiz'] = array('colour' => 'gray', 'line' => 'line', 'legend' => 'Quiz Activity');
-$graph->y_format['feedback'] = array('colour' => 'green', 'line' => 'line', 'legend' => 'Feedback');
+//$graph->y_order = array('logins', 'course_views', 'quiz', 'feedback');
+$graph->y_order = array('logins', 'course_views');
+$graph->y_format['logins'] = array('colour' => 'red', 'line' => 'line', 'legend' => get_string('userlogins', 'report_daily'));
+$graph->y_format['course_views'] = array('colour' => 'blue', 'line' => 'line', 'legend' => get_string('courseactivity', 'report_daily'));
+// $graph->y_format['quiz'] = array('colour' => 'gray', 'line' => 'line', 'legend' => 'Quiz Activity');
+// $graph->y_format['feedback'] = array('colour' => 'green', 'line' => 'line', 'legend' => 'Feedback');
 
-$timestamp -= 1800;
+$timestamp -= 3600;
 
-for ($i=0; $i <= 16; $i++) {
+for ($i=0; $i <= 24; $i++) {
 
-	$end_timestamp = strtotime('+30 minutes', $timestamp);
+	$end_timestamp = strtotime('+1 hours', $timestamp);
 
 	$time_now = time();
 	// If timestamp is today and half hour not completed: don't show
-	if ($time_now - $timestamp <= 86400 && $end_timestamp > ($time_now + 1800)) {
+	if ($time_now - $timestamp <= 86400 && $end_timestamp > ($time_now)) {
 		break;
 	}
-	$graph->x_data[] = date('H:i', $timestamp + 1800);
+	$graph->x_data[] = date('H\h', $timestamp + 3600);
 
 	// Get number of distinct user logins for this time period
-	$query = sprintf("SELECT COUNT(DISTINCT userid) AS no_logins  FROM ".$CFG->prefix."log WHERE time > %d AND time < %d and module = 'user' and action ='login'", 
+	$query = sprintf("SELECT COUNT(DISTINCT userid) AS no_logins  FROM ".$CFG->prefix."logstore_standard_log WHERE timecreated > %d AND timecreated < %d and target = 'user' and action ='loggedin'", 
 		$timestamp,
 		$end_timestamp
 	);
+	// $query = sprintf("SELECT COUNT(DISTINCT userid) AS no_logins  FROM ".$CFG->prefix."log WHERE time > %d AND time < %d and module = 'user' and action ='login'", 
+	// 	$timestamp,
+	// 	$end_timestamp
+	// );
 	$no_logins = 0;
 	if ($user_logins = $DB->get_records_sql($query)) {
 		foreach($user_logins as $login) {
@@ -53,10 +58,14 @@ for ($i=0; $i <= 16; $i++) {
 		}
 	}
 	// Get number of course views
-	$query = sprintf("SELECT COUNT(id) AS course_views FROM ".$CFG->prefix."log WHERE time > %d AND time < %d AND module = 'course'",
+	$query = sprintf("SELECT COUNT(id) AS course_views FROM ".$CFG->prefix."logstore_standard_log WHERE timecreated > %d AND timecreated < %d AND target = 'course' AND action = 'viewed'",
 		$timestamp,
 		$end_timestamp
 	);
+	// $query = sprintf("SELECT COUNT(id) AS course_views FROM ".$CFG->prefix."log WHERE time > %d AND time < %d AND module = 'course'",
+	// 	$timestamp,
+	// 	$end_timestamp
+	// );
 	$c_views = 0;
 	if ($course_views = $DB->get_records_sql($query)) {
 		foreach($course_views as $course) {
@@ -91,8 +100,8 @@ for ($i=0; $i <= 16; $i++) {
 	
 	$graph->y_data['logins'][] = $no_logins;
 	$graph->y_data['course_views'][] = $c_views;
-	$graph->y_data['quiz'][] = $quiz_stats;
-	$graph->y_data['feedback'][] = $feedback_stats;
+	// $graph->y_data['quiz'][] = $quiz_stats;
+	// $graph->y_data['feedback'][] = $feedback_stats;
 	
 
 	$timestamp = $end_timestamp;
